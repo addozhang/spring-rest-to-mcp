@@ -18,8 +18,19 @@ recipeList:
   - org.openrewrite.maven.AddDependency:
       groupId: org.springframework.ai
       artifactId: spring-ai-starter-mcp-server-webmvc
-      version: 1.0.0-SNAPSHOT
+      version: 1.0.3
 
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: UpdateGradle
+description: Upgrade Gradle to use Spring AI Maven repository an Spring AI MCP dependencies
+causesAnotherCycle: true
+recipeList:
+  - org.openrewrite.gradle.AddDependency:
+      groupdId: org.springframework.ai
+      artifactId: spring-ai-starter-mcp-server-webmvc
+      version: 1.0.3
+      configuration: implementation
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
@@ -36,6 +47,16 @@ name: RewriteWebToMCP
 description: Rewrite Web REST API to MCP Server
 recipeList:
   - UpdatePom
+  - org.openrewrite.java.spring.ai.mcp.recipe.mcp.AddToolAnnotationToMappingMethod
+  - org.openrewrite.java.spring.ai.mcp.recipe.mcp.AddToolCallbackProviderBean
+  - org.openrewrite.java.spring.ai.mcp.recipe.config.AddSpringAIMcpProperties
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: RewriteGradleWebToMCP
+description: Rewrite Web REST API to MCP Server for Gradle projects
+recipeList:
+  - UpdateGradle
   - org.openrewrite.java.spring.ai.mcp.recipe.mcp.AddToolAnnotationToMappingMethod
   - org.openrewrite.java.spring.ai.mcp.recipe.mcp.AddToolCallbackProviderBean
   - org.openrewrite.java.spring.ai.mcp.recipe.config.AddSpringAIMcpProperties
